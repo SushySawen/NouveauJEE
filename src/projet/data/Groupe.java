@@ -51,11 +51,11 @@ public class Groupe implements Serializable {
 	}
 
 
-	/*public List<Module> getModules() {
+	public List<Module> getModules() {
 		return modules;
 	}
 
-	public void addModule(Module module) {
+	/*public void addModule(Module module) {
 		if (!modules.contains(module)) {
 			modules.add(module);
 			module.addGroupe(this);

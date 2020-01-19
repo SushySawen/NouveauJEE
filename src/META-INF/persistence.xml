@@ -23,7 +23,7 @@
             <!--  en SqlLite, sur un fichier de votre arborescence (en windows c:/etc...)
             Penser a bien changer le chemin d'accès à la BDD-->
             <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/home/sophie/Téléchargements/ProjetJPA2/web/WEB-INF/data/database.sqlite"/>
-            <property name="javax.persistence.jdbc.user" value=""/>
+            <property name="javax.p ersistence.jdbc.user" value=""/>
             <!--property name="eclipselink.jdbc.password" value=""/-->
             <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
 

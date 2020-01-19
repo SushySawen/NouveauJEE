@@ -2,13 +2,17 @@ package projet.data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Module implements Serializable {
 
-    @Id
+    /**
+	 * Default UID for serializable class
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue
     private Integer id;
 
@@ -41,7 +45,12 @@ public class Module implements Serializable {
 
     public void addGroupe(Groupe groupe) {
         groupes.add(groupe);
-        //groupe.getModules().add(this);
+    }
+    
+    public void addGroupes(Groupe... groupes) {
+        for (Groupe groupe : groupes) {
+			this.groupes.add(groupe);
+		}
     }
 
     @Override

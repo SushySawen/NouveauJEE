@@ -20,8 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 @SuppressWarnings("serial")
 //on doit changer le contenu a l'interieur d'un template (garder seulement un entete et un pieddepage)
@@ -58,41 +61,45 @@ public class Controleur extends HttpServlet {
 
 		///// INITIALISATION DE LA BD
 		// Normalement l'initialisation se fait directement dans la base de données
-		if ((GroupeDAO.getAll().size() == 0) && (EtudiantDAO.getAll().size() == 0)) {
+		if ((GroupeDAO.getAll().size() == 0) 
+				&& (EtudiantDAO.getAll().size() == 0)) {
 
 			// Creation des groupes
-			Groupe MIAM = GroupeDAO.create("miam");
+			Groupe MIAM = GroupeDAO.create("MIAM");
 			Groupe SIMO = GroupeDAO.create("SIMO");
 			Groupe MESSI = GroupeDAO.create("MESSI");
 
 			// Creation des étudiants
-			EtudiantDAO.create("Francis", "Brunet-Manquat", MIAM);
-			EtudiantDAO.create("Philippe", "Martin", MIAM);
-			EtudiantDAO.create("Mario", "Cortes-Cornax", MIAM);
-			EtudiantDAO.create("Françoise", "Coat", SIMO);
-			EtudiantDAO.create("Laurent", "Bonnaud", MESSI);
-			EtudiantDAO.create("Sébastien", "Bourdon", MESSI);
-			EtudiantDAO.create("Mathieu", "Gatumel", SIMO);
+			List<Etudiant> etudiants = new LinkedList<Etudiant>();
+			
+			etudiants.add(EtudiantDAO.create("Francis", "Brunet-Manquat", MIAM));
+			etudiants.add(EtudiantDAO.create("Philippe", "Martin", MIAM));
+			etudiants.add(EtudiantDAO.create("Mario", "Cortes-Cornax", MIAM));
+			etudiants.add(EtudiantDAO.create("Françoise", "Coat", SIMO));
+			etudiants.add(EtudiantDAO.create("Laurent", "Bonnaud", MESSI));
+			etudiants.add(EtudiantDAO.create("Sébastien", "Bourdon", MESSI));
+			etudiants.add(EtudiantDAO.create("Mathieu", "Gatumel", SIMO));
 
 			// Creation des groupes
 			Module MI1 = ModuleDAO.create("MI1");
 			Module MI4 = ModuleDAO.create("MI4");
 
-			// Liés groupe et module
-            //MIAM.addModule(MI1);
-            //MIAM.addModule(MI4);
-            //SIMO.addModule(MI1);
-
+			// Lie les groupes aux modules
             MI1.addGroupe(MIAM);
             MI4.addGroupe(MIAM);
             MI1.addGroupe(SIMO);
 
-            //GroupeDAO.update(MIAM);
-			//GroupeDAO.update(SIMO);
-
+            // Ajoute les modules en BDD
 			ModuleDAO.update(MI1);
 			ModuleDAO.update(MI4);
-
+			
+			// On ajoute des notes pour chaque �tudiants et pour toutes les mati�res
+			for (Etudiant etudiant : etudiants) {
+				List<Module> modules = etudiant.getGroupe().getModules();
+				for (Module module : modules) {
+					NoteDAO.create(etudiant, module, (int) Math.round(Math.random()*20));
+				}
+			}
 		}
 	}
 

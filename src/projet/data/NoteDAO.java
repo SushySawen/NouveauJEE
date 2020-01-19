@@ -10,15 +10,16 @@ public class NoteDAO {
         EntityManager em = GestionFactory.factory.createEntityManager();
         em.getTransaction().begin();
 
-        //
         Query q = em.createQuery("SELECT n FROM Note n WHERE n.etudiant = :etudiant");
                 q.setParameter("etudiant", etudiant);
 
-        List<Note> listNotes = q.getResultList();
+        @SuppressWarnings("unchecked")
+		List<Note> listNotes = q.getResultList();
+        
         return listNotes;
     }
 
-    public static Note create(int valeur, Etudiant etudiant) {
+    public static Note create(Etudiant etudiant, Module module, int valeur) {
 
         // Creation de l'entity manager
         EntityManager em = GestionFactory.factory.createEntityManager();

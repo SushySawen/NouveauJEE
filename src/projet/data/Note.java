@@ -18,6 +18,12 @@ public class Note{
 
     public Note() {
     }
+    
+    public Note(Etudiant etudiant, Module module, int note) {
+    	this.etudiant = etudiant;
+    	this.module = module;
+    	this.valeur = note;
+    }
 
     public Integer getId() {
         return id;
