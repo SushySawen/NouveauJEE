@@ -3,9 +3,7 @@ package projet.data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Entity implementation class for Entity: Groupe
@@ -30,7 +28,7 @@ public class Etudiant implements Serializable {
 	@ManyToOne
 	private Groupe groupe;
 
-	@OneToMany(mappedBy="etudiant")	// LAZY = fetch when needed, EAGER = fetch immediately
+	@OneToMany(mappedBy="etudiant")
 	private List<Note> notes;
 	
 	private static final long serialVersionUID = 1L;

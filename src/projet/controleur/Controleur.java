@@ -22,9 +22,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 
 @SuppressWarnings("serial")
 // on doit changer le contenu a l'interieur d'un template (garder seulement un
@@ -217,17 +214,9 @@ public class Controleur extends HttpServlet {
 
 	private void doConsulterAbsences(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		Collection<Etudiant> etudiants = EtudiantDAO.getAll();
-		HashMap<Integer, List<Integer>> absencesParEtu = new HashMap<>();
-
-		for (Etudiant etudiant : etudiants) {
-			absencesParEtu.put(etudiant.getId(),
-					EtudiantDAO.retrieveByEtudiantId(etudiant));
-		}
 
 		// Mettre l'objet jeu en attribut de requête
-		request.setAttribute("noteParEtu", absencesParEtu);
-		request.setAttribute("etudiants", etudiants);
+		request.setAttribute("etudiants", EtudiantDAO.getAll());
 
 		//
 		loadJSP(urlConsulterAbsences, request, response);
