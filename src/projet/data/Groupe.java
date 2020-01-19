@@ -19,7 +19,8 @@ public class Groupe implements Serializable {
 	@Column(unique=true, nullable=false)
 	private String nom;
 	
-	@OneToMany(mappedBy="groupe", fetch= FetchType.LAZY)	// LAZY = fetch when needed, EAGER = fetch immediately
+	// LAZY = fetch when needed, EAGER = fetch immediately
+	@OneToMany(mappedBy="groupe", fetch= FetchType.LAZY)
 	private List<Etudiant> etudiants;
 
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -55,7 +56,9 @@ public class Groupe implements Serializable {
 		return modules;
 	}
 
-	/*public void addModule(Module module) {
+	/*
+	 * TODO ajout de modules
+	 * public void addModule(Module module) {
 		if (!modules.contains(module)) {
 			modules.add(module);
 			module.addGroupe(this);

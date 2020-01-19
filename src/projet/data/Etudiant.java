@@ -22,9 +22,15 @@ public class Etudiant implements Serializable {
 	@Column(nullable=false)
 	private String nom;
 
+	/**
+	 * Nombre d'absences de l'étudiant
+	 */
 	@Column(nullable = false)
 	private int nbAbsences;
 	
+	/**
+	 * Filière de l'étudiant
+	 */
 	@ManyToOne
 	private Groupe groupe;
 

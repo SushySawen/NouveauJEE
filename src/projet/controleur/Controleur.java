@@ -76,13 +76,13 @@ public class Controleur extends HttpServlet {
 			List<Etudiant> etudiants = new LinkedList<Etudiant>();
 
 			etudiants
-					.add(EtudiantDAO.create("Francis", "Brunet-Manquat", MIAM));
-			etudiants.add(EtudiantDAO.create("Philippe", "Martin", MIAM));
-			etudiants.add(EtudiantDAO.create("Mario", "Cortes-Cornax", MIAM));
-			etudiants.add(EtudiantDAO.create("Françoise", "Coat", SIMO));
-			etudiants.add(EtudiantDAO.create("Laurent", "Bonnaud", MESSI));
-			etudiants.add(EtudiantDAO.create("Sébastien", "Bourdon", MESSI));
-			etudiants.add(EtudiantDAO.create("Mathieu", "Gatumel", SIMO));
+					.add(EtudiantDAO.create("Francis", "Brunet-Manquat", MIAM, getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Philippe", "Martin", MIAM, getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Mario", "Cortes-Cornax", MIAM, getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Françoise", "Coat", SIMO, getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Laurent", "Bonnaud", MESSI, getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Sébastien", "Bourdon", MESSI, getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Mathieu", "Gatumel", SIMO, getRandomAbs()));
 
 			// Creation des groupes
 			Module MI1 = ModuleDAO.create("MI1");
@@ -97,8 +97,8 @@ public class Controleur extends HttpServlet {
 			ModuleDAO.update(MI1);
 			ModuleDAO.update(MI4);
 
-			// On ajoute des notes pour chaque �tudiants et pour toutes les
-			// mati�res
+			// On ajoute des notes pour chaque étudiants et pour toutes les
+			// matières
 			for (Etudiant etudiant : etudiants) {
 				List<Module> modules = etudiant.getGroupe().getModules();
 				for (Module module : modules) {
@@ -106,12 +106,11 @@ public class Controleur extends HttpServlet {
 							(int) Math.round(Math.random() * 20));
 				}
 			}
-
-			EtudiantDAO.getAll().get(0).getNotes().stream().forEach(note -> {
-				System.out.println(note.getEtudiant().getNom() + " -> "
-						+ note.getModule().getNom() + " : " + note.getValeur());
-			});
 		}
+	}
+
+	private int getRandomAbs() {
+		return (int) (Math.random()*8);
 	}
 
 	// Initialisation de la liste des notes si la BDD de notes est vide

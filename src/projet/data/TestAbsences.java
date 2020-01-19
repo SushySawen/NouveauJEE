@@ -19,14 +19,14 @@ public class TestAbsences {
 		
 		// Initialisation
 		// Creation des étudiants
-		Etudiant FBM = EtudiantDAO.create("Francis", "Brunet-Manquat", MIAM);
+		Etudiant FBM = EtudiantDAO.create("Francis", "Brunet-Manquat", MIAM, 0);
 		int idFBM = FBM.getId();
-		EtudiantDAO.create("Philippe", "Martin", MIAM);
-		EtudiantDAO.create("Mario", "Cortes-Cornax", MIAM);
-		EtudiantDAO.create("Françoise", "Coat", SIMO);
-		EtudiantDAO.create("Laurent", "Bonnaud", MESSI);
-		EtudiantDAO.create("Sébastien", "Bourdon", MESSI);
-		Etudiant MG = EtudiantDAO.create("Mathieu", "Gatumel", SIMO);
+		EtudiantDAO.create("Philippe", "Martin", MIAM, 0);
+		EtudiantDAO.create("Mario", "Cortes-Cornax", MIAM, 0);
+		EtudiantDAO.create("Françoise", "Coat", SIMO, 0);
+		EtudiantDAO.create("Laurent", "Bonnaud", MESSI, 0);
+		EtudiantDAO.create("Sébastien", "Bourdon", MESSI, 0);
+		Etudiant MG = EtudiantDAO.create("Mathieu", "Gatumel", SIMO, 0);
 		
 		// Retrouver un etudiant par son id
 		Etudiant etudiant_TMP = EtudiantDAO.retrieveById(idFBM);
