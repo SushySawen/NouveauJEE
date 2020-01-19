@@ -104,4 +104,19 @@ public class NoteDAO {
         // if EclipseLink cache enable -->
         // GestionFactory.factory.getCache().evictAll();
     }
+    
+	// Retourne l'ensemble des etudiants
+	public static List<Note> getAll() {
+
+		// Creation de l'entity manager
+		EntityManager em = GestionFactory.factory.createEntityManager();
+
+		// Recherche
+		Query q = em.createQuery("SELECT n FROM Note n");
+
+		@SuppressWarnings("unchecked")
+		List<Note> notes = q.getResultList();
+
+		return notes;
+	}
 }

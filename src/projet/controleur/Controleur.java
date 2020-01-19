@@ -106,6 +106,11 @@ public class Controleur extends HttpServlet {
 							(int) Math.round(Math.random() * 20));
 				}
 			}
+			
+			List<Note> notes = NoteDAO.getAll();
+			for (Note note : notes) {
+				System.out.println(note);
+			}
 		}
 	}
 
@@ -244,15 +249,8 @@ public class Controleur extends HttpServlet {
 	private void doNotes(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		Collection<Etudiant> etudiants = EtudiantDAO.getAll();
-		HashMap<Integer, List<Note>> notesParEtu = new HashMap<>();
-
-		for (Etudiant etudiant : etudiants) {
-			notesParEtu.put(etudiant.getId(),
-					NoteDAO.retrieveByEtudiantId(etudiant));
-		}
 
 		// Mettre l'objet jeu en attribut de requête
-		request.setAttribute("noteParEtu", notesParEtu);
 		request.setAttribute("etudiants", etudiants);
 
 		// Chargement de la JSP de consultation des notes
