@@ -113,6 +113,11 @@ public class Controleur extends HttpServlet {
 				}
 			}
 
+			List<Note> notes = NoteDAO.getAll();
+			for (Note note : notes) {
+				System.out.println(note);
+			}
+
 		}
 	}
 
