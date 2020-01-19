@@ -80,7 +80,15 @@ public class Etudiant implements Serializable {
 	public void setNbAbsences(int nbAbsences) {
 		this.nbAbsences = nbAbsences;
 	}
-   
+	
+	public List<Note> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<Note> notes) {
+		this.notes = notes;
+	}
+
 	@Override
 	public String toString() {
 		return "[" + this.getId() + "] " + this.getPrenom() + " " + this.getNom();

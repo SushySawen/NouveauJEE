@@ -22,7 +22,7 @@ public class Groupe implements Serializable {
 	@OneToMany(mappedBy="groupe", fetch= FetchType.LAZY)	// LAZY = fetch when needed, EAGER = fetch immediately
 	private List<Etudiant> etudiants;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Module> modules;
 	
 	private static final long serialVersionUID = 1L;

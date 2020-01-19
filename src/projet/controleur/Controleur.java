@@ -100,6 +100,9 @@ public class Controleur extends HttpServlet {
 					NoteDAO.create(etudiant, module, (int) Math.round(Math.random()*20));
 				}
 			}
+			
+			System.out.println(etudiants.get(0).getNotes().get(0));
+			
 		}
 	}
 
