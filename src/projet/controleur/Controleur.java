@@ -75,14 +75,20 @@ public class Controleur extends HttpServlet {
 			// Creation des étudiants
 			List<Etudiant> etudiants = new LinkedList<Etudiant>();
 
-			etudiants
-					.add(EtudiantDAO.create("Francis", "Brunet-Manquat", MIAM, getRandomAbs()));
-			etudiants.add(EtudiantDAO.create("Philippe", "Martin", MIAM, getRandomAbs()));
-			etudiants.add(EtudiantDAO.create("Mario", "Cortes-Cornax", MIAM, getRandomAbs()));
-			etudiants.add(EtudiantDAO.create("Françoise", "Coat", SIMO, getRandomAbs()));
-			etudiants.add(EtudiantDAO.create("Laurent", "Bonnaud", MESSI, getRandomAbs()));
-			etudiants.add(EtudiantDAO.create("Sébastien", "Bourdon", MESSI, getRandomAbs()));
-			etudiants.add(EtudiantDAO.create("Mathieu", "Gatumel", SIMO, getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Francis", "Brunet-Manquat", MIAM,
+					getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Philippe", "Martin", MIAM,
+					getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Mario", "Cortes-Cornax", MIAM,
+					getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Françoise", "Coat", SIMO,
+					getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Laurent", "Bonnaud", MESSI,
+					getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Sébastien", "Bourdon", MESSI,
+					getRandomAbs()));
+			etudiants.add(EtudiantDAO.create("Mathieu", "Gatumel", SIMO,
+					getRandomAbs()));
 
 			// Creation des groupes
 			Module MI1 = ModuleDAO.create("MI1");
@@ -106,7 +112,7 @@ public class Controleur extends HttpServlet {
 							(int) Math.round(Math.random() * 20));
 				}
 			}
-			
+
 			List<Note> notes = NoteDAO.getAll();
 			for (Note note : notes) {
 				System.out.println(note);
@@ -115,7 +121,7 @@ public class Controleur extends HttpServlet {
 	}
 
 	private int getRandomAbs() {
-		return (int) (Math.random()*8);
+		return (int) (Math.random() * 8);
 	}
 
 	// Initialisation de la liste des notes si la BDD de notes est vide
@@ -191,15 +197,8 @@ public class Controleur extends HttpServlet {
 	private void doConsulterNotes(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		Collection<Etudiant> etudiants = EtudiantDAO.getAll();
-		HashMap<Integer, List<Note>> notesParEtu = new HashMap<>();
-
-		for (Etudiant etudiant : etudiants) {
-			notesParEtu.put(etudiant.getId(),
-					NoteDAO.retrieveByEtudiantId(etudiant));
-		}
 
 		// Mettre l'objet jeu en attribut de requête
-		request.setAttribute("noteParEtu", notesParEtu);
 		request.setAttribute("etudiants", etudiants);
 
 		// Chargement de la JSP consulter notes
@@ -261,18 +260,8 @@ public class Controleur extends HttpServlet {
 	private void doAbsences(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		/*
-		 * Collection<Etudiant> etudiants = EtudiantDAO.getAll();
-		 * HashMap<Integer, Integer> absenceParEtu = new HashMap<>();
-		 * 
-		 * for (Etudiant etudiant : etudiants){
-		 * absenceParEtu.put(etudiant.getId(), EtudiantDAO.(etudiant.getId()));
-		 * }
-		 * 
-		 * // Mettre l'objet jeu en attribut de requête
-		 * request.setAttribute("absenceParEtu", absenceParEtu);
-		 * request.setAttribute("etudiants", etudiants);
-		 */
+		Collection<Etudiant> etudiants = EtudiantDAO.getAll();
+		request.setAttribute("etudiants", etudiants);
 
 		// Chargement de la JSP de consultation des absences
 		loadJSP(urlAbsences, request, response);

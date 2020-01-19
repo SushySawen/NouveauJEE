@@ -1,4 +1,4 @@
-<%@ page import="projet.data.Etudiant" %><%--
+<%@ page import="projet.data.Etudiant, projet.data.Note, projet.data.Module" %><%--
   Created by IntelliJ IDEA.
   User: sophie
   Date: 09/12/2019
@@ -7,7 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="etudiants" type="java.util.Collection<projet.data.Etudiant>" scope="request"/>
-<jsp:useBean id="noteParEtu" type="java.util.HashMap<java.lang.Integer, java.lang.Integer>" scope="request"/>
 <html>
 <head>
     <title><%= application.getInitParameter("title")%></title>
@@ -30,7 +29,9 @@
         for (Etudiant etudiant : etudiants){
             out.print("<tr>");
             out.print("<td>"+etudiant.getPrenom()+" "+etudiant.getNom()+"</td>");
-            out.print("<td>"+noteParEtu.get(etudiant.getId())+"</td>");
+            for(Note note : etudiant.getNotes()){
+            	out.print(note.getModule().getNom() + " : " + note.getValeur()+"<br>");
+            }
             out.print("</tr>");
         }
 
