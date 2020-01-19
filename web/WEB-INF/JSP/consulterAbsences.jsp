@@ -45,7 +45,9 @@
 		<%
 			for (Etudiant etudiant : etudiants) {
 				out.print("<tr>");
-				out.print("<td>" + etudiant.getPrenom() + " " + etudiant.getNom() + " " + etudiant.getNbAbsences() + "</td>");
+				out.print("<td>" + etudiant.getPrenom() + " "
+						+ etudiant.getNom() + "</td>");
+				out.print("<td>" + etudiant.getNbAbsences() + "</td>");
 				out.print("</tr>");
 			}
 		%>
