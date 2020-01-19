@@ -31,6 +31,7 @@ public class NoteDAO {
         Note note = new Note();
         note.setValeur(valeur);
         note.setEtudiant(etudiant);
+        note.setModule(module);
         em.persist(note);
 
         // Commit
