@@ -2,6 +2,7 @@ package projet.data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,12 +23,26 @@ public class Module implements Serializable {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Groupe> groupes;
 
+    @OneToMany(mappedBy = "module")
+    private List<Note> notes = new ArrayList<>();
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setGroupes(List<Groupe> groupes) {
+		this.groupes = groupes;
+	}
+
+	public List<Note> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<Note> notes) {
+		this.notes = notes;
+	}
+
+	public void setId(Integer id) {
         this.id = id;
     }
 

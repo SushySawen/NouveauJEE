@@ -1,59 +1,62 @@
 package projet.data;
 
 import javax.persistence.*;
+
 @Entity
-public class Note{
-    @Id
-    @GeneratedValue
-    private Integer id;
+public class Note {
+	@Id
+	@GeneratedValue
+	private Integer id;
 
-    @ManyToOne
-    Etudiant etudiant;
+	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	@JoinColumn(name = "fk_note")
+	Etudiant etudiant;
 
-    @ManyToOne
-    Module module;
+	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	@JoinColumn(name = "fk_note")
+	Module module;
 
-    @Column(nullable=false)
-    private int valeur;
+	@Column(nullable = false)
+	private int valeur;
 
-    public Note() {
-    }
-    
-    public Note(Etudiant etudiant, Module module, int note) {
-    	this.etudiant = etudiant;
-    	this.module = module;
-    	this.valeur = note;
-    }
+	public Note() {
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public Note(Etudiant etudiant, Module module, int note) {
+		this.etudiant = etudiant;
+		this.module = module;
+		this.valeur = note;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public Etudiant getEtudiant() {
-        return etudiant;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setEtudiant(Etudiant etudiant) {
-        this.etudiant = etudiant;
-    }
+	public Etudiant getEtudiant() {
+		return etudiant;
+	}
 
-    public Module getModule() {
-        return module;
-    }
+	public void setEtudiant(Etudiant etudiant) {
+		this.etudiant = etudiant;
+	}
 
-    public void setModule(Module module) {
-        this.module = module;
-    }
+	public Module getModule() {
+		return module;
+	}
 
-    public int getValeur() {
-        return valeur;
-    }
+	public void setModule(Module module) {
+		this.module = module;
+	}
 
-    public void setValeur(int valeur) {
-        this.valeur = valeur;
-    }
+	public int getValeur() {
+		return valeur;
+	}
+
+	public void setValeur(int valeur) {
+		this.valeur = valeur;
+	}
 }
