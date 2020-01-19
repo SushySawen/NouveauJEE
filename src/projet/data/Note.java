@@ -9,11 +9,9 @@ public class Note {
 	private Integer id;
 
 	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-	@JoinColumn(name = "fk_note")
 	Etudiant etudiant;
 
 	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-	@JoinColumn(name = "fk_note")
 	Module module;
 
 	@Column(nullable = false)
