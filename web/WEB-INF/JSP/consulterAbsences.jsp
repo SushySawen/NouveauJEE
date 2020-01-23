@@ -41,7 +41,7 @@
 			href="${pageContext.request.contextPath}/do/absences">Editez les
 			absences</a>
 	</nav>
-	<table>
+	<table class="table table-striped">
 		<%
 			for (Etudiant etudiant : etudiants) {
 				out.print("<tr>");

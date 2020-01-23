@@ -8,10 +8,10 @@ public class Note {
 	@GeneratedValue
 	private Integer id;
 
-	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	Etudiant etudiant;
 
-	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	Module module;
 
 	@Column(nullable = false)

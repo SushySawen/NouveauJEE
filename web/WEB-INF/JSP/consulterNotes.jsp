@@ -25,18 +25,23 @@
     <a class="nav-link" href="${pageContext.request.contextPath}/do/consulterAbsences">Consulter les absences</a>
     <a class="nav-link" href="${pageContext.request.contextPath}/do/absences">Editez les absences</a>
 </nav>
-<table>
+<table class="table table-striped">
+    <thead><tr><td>Etudiant</td><td>MI1</td><td>MI4</td></tr></thead>
+    <tbody>
     <%
         for (Etudiant etudiant : etudiants){
             out.print("<tr>");
-            out.print("<td>"+etudiant.getPrenom()+" "+etudiant.getNom()+"</td><td>");
+            out.print("<td>"+etudiant.getPrenom()+" "+etudiant.getNom()+"</td>");
+
             for(Note note : etudiant.getNotes()){
-            	out.print(note.getModule().getNom() + " : " + note.getValeur()+"<br>");
+                out.print("<td>");
+            	out.print(note.getValeur()+"</td>");
             }
             out.print("</td></tr>");
         }
 
     %>
+    </tbody>
 </table>
 
 </body>

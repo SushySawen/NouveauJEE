@@ -21,7 +21,13 @@ public class Module implements Serializable {
     private String nom;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Groupe> groupes;
+    @JoinTable(name = "module_groupe",
+    joinColumns = @JoinColumn(name = "module_id"),
+    inverseJoinColumns = @JoinColumn(name = "groupe_id")
+    )
+    private List<Groupe> groupes = new ArrayList<>();
+
+
 
     @OneToMany(mappedBy = "module")
     private List<Note> notes = new ArrayList<>();
@@ -60,11 +66,13 @@ public class Module implements Serializable {
 
     public void addGroupe(Groupe groupe) {
         groupes.add(groupe);
+        groupe.getModules().add(this);
     }
     
     public void addGroupes(Groupe... groupes) {
         for (Groupe groupe : groupes) {
 			this.groupes.add(groupe);
+			groupe.getModules().add(this);
 		}
     }
 
