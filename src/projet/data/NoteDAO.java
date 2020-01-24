@@ -19,6 +19,19 @@ public class NoteDAO {
         return listNotes;
     }
 
+    public static Note retrieveNoteById(int id){
+        // Creation de l'entity manager
+        EntityManager em = GestionFactory.factory.createEntityManager();
+
+        //
+        Note note = em.find(Note.class, id);
+
+        // Close the entity manager
+        em.close();
+
+        return note;
+    }
+
     public static Note create(Etudiant etudiant, Module module, int valeur) {
 
         // Creation de l'entity manager

@@ -154,8 +154,9 @@ public class Controleur extends HttpServlet {
 	// POST
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		// on passe la main au GET
-		doGet(request, response);
+
+			doGet(request, response);
+
 	}
 
 	// GET
@@ -211,7 +212,7 @@ public class Controleur extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		Etudiant etu = EtudiantDAO
 				.retrieveById(Integer.valueOf(request.getParameter("id")));
-		request.setAttribute("etudiants", etu);
+		request.setAttribute("etudiant", etu);
 
 		// Chargement de la JSP de détail d'un étudient
 		loadJSP(urlDetails, request, response);
@@ -249,6 +250,19 @@ public class Controleur extends HttpServlet {
 
 	private void doNotes(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		if (request.getParameter("valeur")!=null && request.getParameter(("id"))!=null){
+			String ids[] = request.getParameterValues("id");
+			String valeurs[] = request.getParameterValues("valeur");
+
+			int i = 0;
+			for (String id : ids){
+				Note note = NoteDAO.retrieveNoteById(Integer.valueOf(id));
+				note.setValeur(Integer.valueOf(valeurs[i]));
+				NoteDAO.update(note);
+				i++;
+			}
+		}
+
 		Collection<Etudiant> etudiants = EtudiantDAO.getAll();
 
 		// Mettre l'objet jeu en attribut de requête

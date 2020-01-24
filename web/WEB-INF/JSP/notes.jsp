@@ -25,7 +25,7 @@
 <body>
 <h1>Notes des étudiants</h1>
 <jsp:include page='<%= application.getInitParameter("entetedepage")%>'></jsp:include>
-<form Method="POST" Action="#">
+<form method="POST" action="<%=application.getContextPath()%>/do/notes">
     <table class="table table-striped">
         <thead>
         <tr>
@@ -40,9 +40,14 @@
                 out.print("<tr>");
                 out.print("<td>" + etudiant.getPrenom() + " " + etudiant.getNom() + "</td>");
                 for (Note note : etudiant.getNotes()) {
-                    out.print("<td>");
-                    out.print("<input type=\"number\" name=\""+note.getId()+"\" value=\""+note.getValeur()+"\">");
-                    out.print("</td>");
+                    if (etudiant.getNotes()==null){
+                        out.print("<td></td>");
+                    } else {
+                        out.print("<td>");
+                        out.print("<input type=\"hidden\" name=\"id\" value=\"" + note.getId() + "\">");
+                        out.print("<input type=\"number\" name=\"valeur\" value=\"" + note.getValeur() + "\">");
+                        out.print("</td>");
+                    }
                 }
                 out.print("</tr>");
             }
