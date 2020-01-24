@@ -19,13 +19,7 @@
 </head>
 <body>
 <h1>Détails de l'étudiant</h1>
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-    <a class="nav-link" href="${pageContext.request.contextPath}/do/groupes">voir les groupes</a>
-    <a class="nav-link" href="${pageContext.request.contextPath}/do/consulterNotes">Consulter les notes</a>
-    <a class="nav-link" href="${pageContext.request.contextPath}/do/notes">Editez les notes</a>
-    <a class="nav-link" href="${pageContext.request.contextPath}/do/consulterAbsences">Consulter les absences</a>
-    <a class="nav-link" href="${pageContext.request.contextPath}/do/absences">Editez les absences</a>
-</nav>
+<jsp:include page='<%= application.getInitParameter("entetedepage")%>'></jsp:include>
 <%-- Affichage des détails de l'étudiant--%>
 <p>Fiche de : <%= etudiant.getNom()%> <%= etudiant.getPrenom()%></p>
 <table class="table">

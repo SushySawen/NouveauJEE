@@ -33,7 +33,7 @@ import java.util.List;
 // variable de session pour le filtre de groupes ? Quand on clique sur un
 // groupe, cliquer ensuite sur consulter les notes etc, ne montre que ce groupe
 public class Controleur extends HttpServlet {
-    
+
 	private String urlEtudiants;
 	private String urlGroupes;
 	private String urlAccueil;
