@@ -24,14 +24,14 @@
 
 
 <!-- tableau d'étudiants  -->
-<table>
-
+<table class="table table-striped">
+	<thead>
 	<tr>
 		<th>Prénom/nom de l'étudiant</th>
 		<th>Son groupe</th>
 	<tr>
-	
-	
+	</thead>
+	<tbody>
 <% for (Etudiant etudiant : etudiants) {%>
 
 	<tr>
@@ -40,6 +40,7 @@
 		<td><%=etudiant.getGroupe().getNom()%></td>
 	</tr>
 <% } %>
+	</tbody>
 </table>
 
 

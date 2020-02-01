@@ -18,11 +18,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.swing.*;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("serial")
 // on doit changer le contenu a l'interieur d'un template (garder seulement un
@@ -57,6 +56,8 @@ public class Controleur extends HttpServlet {
 		urlConsulterAbsences = getServletConfig()
 				.getInitParameter("urlConsulterAbsences");
 		urlDetails = getServletConfig().getInitParameter("urlDetails");
+
+
 
 		// Création de la factory permettant la création d'EntityManager
 		// (gestion des transactions)
@@ -106,19 +107,13 @@ public class Controleur extends HttpServlet {
 
 			// On ajoute des notes pour chaque étudiants et pour toutes les
 			// matières
-			for (Etudiant etudiant : etudiants) {
+/*			for (Etudiant etudiant : etudiants) {
 				List<Module> modules = etudiant.getGroupe().getModules();
 				for (Module module : modules) {
 					NoteDAO.create(etudiant, module,
 							(int) Math.round(Math.random() * 20));
 				}
-			}
-
-			List<Note> notes = NoteDAO.getAll();
-			for (Note note : notes) {
-				System.out.println(note);
-			}
-
+			}*/
 		}
 	}
 
@@ -169,6 +164,12 @@ public class Controleur extends HttpServlet {
 			action = "/etudiants";
 		}
 
+		//Gestion de la session
+		//reponse.sendRedirect -> pour clean l'url
+		String groupeId = request.getParameter("groupe");
+		if(groupeId != null){
+			request.getSession().setAttribute("groupe",Integer.valueOf(groupeId));
+		}
 		// Log action
 		System.out.println("PROJET JPA : action = " + action);
 
@@ -194,20 +195,84 @@ public class Controleur extends HttpServlet {
 			doEtudiants(request, response);
 		}
 	}
-
 	// ///////////////////////
-	//
+	//Consulter les notes des etudiants
 	private void doConsulterNotes(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		Collection<Etudiant> etudiants = EtudiantDAO.getAll();
-
-		// Mettre l'objet jeu en attribut de requête
-		request.setAttribute("etudiants", etudiants);
+		// Recupération des étudiants et des modules
+		initNotesParEtu(request, response);
 
 		// Chargement de la JSP consulter notes
 		loadJSP(urlConsulterNotes, request, response);
 	}
+	//Modifier les notes des etudiants
+	private void doNotes(HttpServletRequest request,
+						 HttpServletResponse response) throws ServletException, IOException {
 
+		//Changement de la valeur des notes
+		if (request.getParameter("valeur")!=null){
+			String valeurs[] = request.getParameterValues("valeur");
+			String etuId[] = request.getParameterValues("etuId");
+			String moduId[] = request.getParameterValues("modId");
+
+
+			int i = 0;
+			while (i<valeurs.length){
+				String value = valeurs[i];
+				if (value != null && !value.isEmpty()) {
+					NoteDAO.merge(Integer.valueOf(etuId[i]), Integer.valueOf(moduId[i]), Integer.valueOf(value));
+				}
+				i++;
+			}
+		}
+
+		// Récupération des notes
+		initNotesParEtu(request, response);
+		// Chargement de la JSP de consultation des notes
+		loadJSP(urlNotes, request, response);
+	}
+	//Initialiser les notes des etudiants par modules
+	private void initNotesParEtu(HttpServletRequest request,
+								 HttpServletResponse response){
+		Map<Integer, Map<Integer, Note>> notesParEtuModule = new HashMap<>();
+		List<Module> modules;
+		List <Note> notes;//
+		List <Etudiant> etudiants;
+
+		Integer groupeID = (Integer) request.getSession().getAttribute("groupe");
+		if (groupeID != null) {
+			Groupe groupe = GroupeDAO.findGroupe(groupeID);
+			etudiants = groupe.getEtudiants();
+			modules = groupe.getModules();
+			notes = new ArrayList<>();
+			for (Etudiant etudiant : etudiants){
+				for (Note note : etudiant.getNotes()){
+					notes.add(note);
+				}
+			}
+		} else {
+			modules = ModuleDAO.getAll();
+			etudiants = EtudiantDAO.getAll();
+			notes = NoteDAO.getAll();
+		}
+		for (Note note : notes) {
+			Map<Integer, Note> noteEtu = notesParEtuModule.get(note.getEtudiant().getId());
+			if (noteEtu == null) {
+				noteEtu = new HashMap<>();
+				notesParEtuModule.put(note.getEtudiant().getId(), noteEtu);
+			}
+			noteEtu.put(note.getModule().getId(), note);
+		}
+
+
+		// Mettre l'objet jeu en attribut de requête
+		request.setAttribute("notesParEtuModule", notesParEtuModule);
+		request.setAttribute("modules",modules);
+		request.setAttribute("etudiants",etudiants);
+	}
+
+	// ///////////////////////
+	//
 	private void doDetails(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		Etudiant etu = EtudiantDAO
@@ -217,24 +282,59 @@ public class Controleur extends HttpServlet {
 		// Chargement de la JSP de détail d'un étudient
 		loadJSP(urlDetails, request, response);
 	}
-
+	// ///////////////////////
+	//
 	private void doConsulterAbsences(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// Mettre l'objet jeu en attribut de requête
-		request.setAttribute("etudiants", EtudiantDAO.getAll());
+		initAbsences(request);
 
 		//
 		loadJSP(urlConsulterAbsences, request, response);
 	}
+	// va permettre de modifier les absences
+	private void doAbsences(HttpServletRequest request,
+							HttpServletResponse response) throws ServletException, IOException {
+		if (request.getParameter("etudiantAbsence")!=null && request.getParameter(("etuId"))!=null){
+			String ids[] = request.getParameterValues("etuId");
+			String valeurs[] = request.getParameterValues("etudiantAbsence");
 
+			int i = 0;
+			for (String id : ids){
+				Etudiant etudiant = EtudiantDAO.retrieveById(Integer.valueOf(id));
+				etudiant.setNbAbsences(Integer.valueOf(valeurs[i]));
+				EtudiantDAO.update(etudiant);
+				i++;
+			}
+		}
+		initAbsences(request);
+
+		// Chargement de la JSP de consultation des absences
+		loadJSP(urlAbsences, request, response);
+	}
+
+	private void initAbsences(HttpServletRequest request) {
+		List <Etudiant> etudiants;
+		Integer groupeID = (Integer) request.getSession().getAttribute("groupe");
+		if (groupeID != null) {
+			Groupe groupe = GroupeDAO.findGroupe(groupeID);
+			etudiants = groupe.getEtudiants();
+		} else {
+			etudiants = EtudiantDAO.getAll();
+		}
+		request.setAttribute("etudiants", etudiants);
+	}
+
+	// ///////////////////////
+	//
 	private void doAccueil(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
 		// Chargement de la JSP d'acceuil
 		loadJSP(urlAccueil, request, response);
 	}
-
+	// ///////////////////////
+	//
 	private void doEtudiants(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
@@ -247,42 +347,6 @@ public class Controleur extends HttpServlet {
 		// Chargement de la JSP consulter étudiants
 		loadJSP(urlEtudiants, request, response);
 	}
-
-	private void doNotes(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		if (request.getParameter("valeur")!=null && request.getParameter(("id"))!=null){
-			String ids[] = request.getParameterValues("id");
-			String valeurs[] = request.getParameterValues("valeur");
-
-			int i = 0;
-			for (String id : ids){
-				Note note = NoteDAO.retrieveNoteById(Integer.valueOf(id));
-				note.setValeur(Integer.valueOf(valeurs[i]));
-				NoteDAO.update(note);
-				i++;
-			}
-		}
-
-		Collection<Etudiant> etudiants = EtudiantDAO.getAll();
-
-		// Mettre l'objet jeu en attribut de requête
-		request.setAttribute("etudiants", etudiants);
-
-		// Chargement de la JSP de consultation des notes
-		loadJSP(urlNotes, request, response);
-	}
-
-	// va permettre de modifier les absences
-	private void doAbsences(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		Collection<Etudiant> etudiants = EtudiantDAO.getAll();
-		request.setAttribute("etudiants", etudiants);
-
-		// Chargement de la JSP de consultation des absences
-		loadJSP(urlAbsences, request, response);
-	}
-
 	// ///////////////////////
 	//
 	private void doGroupes(HttpServletRequest request,

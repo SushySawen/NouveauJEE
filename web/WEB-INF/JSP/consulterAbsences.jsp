@@ -30,6 +30,8 @@
 	<h1>Consultation des absences pour tous les étudiants</h1>
 	<jsp:include page='<%= application.getInitParameter("entetedepage")%>'></jsp:include>
 	<table class="table table-striped">
+		<thead><tr><th>Etudiant</th><th>Absences</th></tr></thead>
+		<tbody>
 		<%
 			for (Etudiant etudiant : etudiants) {
 				out.print("<tr>");
@@ -39,6 +41,7 @@
 				out.print("</tr>");
 			}
 		%>
+		</tbody>
 	</table>
 </body>
 </html>

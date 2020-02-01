@@ -23,7 +23,7 @@
 <%-- Affichage des détails de l'étudiant--%>
 <p>Fiche de : <%= etudiant.getNom()%> <%= etudiant.getPrenom()%></p>
 <table class="table">
-    <tr><td>Groupe</td><td><%= etudiant.getGroupe()%></td></tr>
+    <tr><td>Groupe</td><td><%= etudiant.getGroupe().getNom()%></td></tr>
 <%--    <tr><td>Moyenne Generale</td><td><%= etudiant.%></td></tr>--%>
     <tr><td>Absences</td><td><%= etudiant.getNbAbsences()%></td></tr>
 </table>

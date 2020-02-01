@@ -20,17 +20,23 @@
 <body>
 <h1>Notes des étudiants</h1>
 <jsp:include page='<%= application.getInitParameter("entetedepage")%>'></jsp:include>
+<form method="POST" action="<%=application.getContextPath()%>/do/absences">
 	<table class="table table-striped">
+		<thead><tr><th>Etudiant</th><th>Absences</th></tr></thead>
+		<tbody>
 		<%
 			for (Etudiant etudiant : etudiants) {
 				out.print("<tr>");
 				out.print("<td>" + etudiant.getPrenom() + " "
 						+ etudiant.getNom() + "</td>");
-				out.print("<td>"+ "<input type=\"number\" name=\""+etudiant+"\" value=\""+etudiant.getNbAbsences()+"\">" +"</td>");
+				out.print("<input type=\"hidden\" name=\"etuId\" value=\"" + etudiant.getId() + "\">");
+				out.print("<td>"+ "<input type=\"number\" min=\"0\" name=\"etudiantAbsence\" value=\""+etudiant.getNbAbsences()+"\">" +"</td>");
 				out.print("</tr>");
 			}
 		%>
+		</tbody>
 	</table>
-<input type="button" value="Enregistrer les modifications">
+<input type="submit" value="Enregistrer les modifications">
+</form>
 </body>
 </html>

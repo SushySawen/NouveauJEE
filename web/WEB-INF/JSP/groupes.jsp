@@ -9,7 +9,7 @@
 
 <html>
 <head>
-<title><%=getServletContext().getInitParameter("title")%></title>
+<title><%=application.getInitParameter("title")%></title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -20,24 +20,30 @@
 
 <h1>Liste des groupes présents en BD</h1>
 <jsp:include page='<%= application.getInitParameter("entetedepage")%>'></jsp:include>
-<p><a href="<%= getServletContext().getContextPath()%>/do/etudiants">voir les étudiants</a></p>
+
 
 <!-- tableau de groupes  -->
-<table>
+<form method="POST" action="<%=application.getContextPath()%>/do/groupes">
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th>Nom du groupe</th>
+			<th>Nombre d'étudiants</th>
+		</tr>
+		</thead>
+		<tbody>
+	<% for (Groupe groupe : groupes) {%>
 
-	<tr>
-		<th>Nom du groupe</th>
-		<th>Nombre d'étudiants</th>
-	</tr>
+		<tr>
+			<td><button class="btn btn-primary" type="submit" name="groupe" value="<%=groupe.getId()%>">
+				<%=groupe.getNom()%></button></td>
 
-<% for (Groupe groupe : groupes) {%>
-
-	<tr>
-		<td><%=groupe.getNom()%></td>
-		<td><%=groupe.getEtudiants().size()%></td>
-	</tr>
+			<td><%=groupe.getEtudiants().size()%></td>
+		</tr>
 <% } %>
-</table>
+		</tbody>
+	</table>
+</form>
 
 
 </body>

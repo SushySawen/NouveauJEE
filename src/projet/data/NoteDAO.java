@@ -1,6 +1,7 @@
 package projet.data;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -133,4 +134,30 @@ public class NoteDAO {
 
 		return notes;
 	}
+	//Va soit creer une note si elle n'existe pas, soit la mette a jour
+	public static void merge(Integer etuId, Integer moduleId, Integer noteValue){
+        EntityManager em = GestionFactory.factory.createEntityManager();
+        em.getTransaction().begin();
+
+        Query q = em.createQuery("SELECT n FROM Note n WHERE n.etudiant.id = :etudiant AND n.module.id = :module");
+        q.setParameter("etudiant", etuId);
+        q.setParameter("module", moduleId);
+        Note note;
+        try {
+            note = (Note) q.getSingleResult();
+        }
+        catch (NoResultException e) {
+            note = new Note();
+            note.setEtudiant(EtudiantDAO.retrieveById(etuId));
+            note.setModule(ModuleDAO.retrieveById(moduleId));
+        }
+        note.setValeur(noteValue);
+        em.merge(note);
+        // Commit
+        em.getTransaction().commit();
+
+        // Close the entity manager
+        em.close();
+
+    }
 }
