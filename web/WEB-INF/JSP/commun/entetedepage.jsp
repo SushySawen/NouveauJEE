@@ -8,4 +8,12 @@
     <a class="nav-link" href="${pageContext.request.contextPath}/do/notes">Editez les notes</a>
     <a class="nav-link" href="${pageContext.request.contextPath}/do/consulterAbsences">Consulter les absences</a>
     <a class="nav-link" href="${pageContext.request.contextPath}/do/absences">Editez les absences</a>
+
 </nav>
+<% if (request.getSession().getAttribute("groupe") != null){
+
+%>
+<jsp:include page='<%= application.getInitParameter("boutonFiltre")%>'></jsp:include>
+<%
+    }
+%>

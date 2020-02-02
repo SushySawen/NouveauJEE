@@ -35,7 +35,7 @@
 	<% for (Groupe groupe : groupes) {%>
 
 		<tr>
-			<td><button class="btn btn-primary" type="submit" name="groupe" value="<%=groupe.getId()%>">
+			<td><button class="btn btn-primary" type="submit" name="ajouterFiltre" value="<%=groupe.getId()%>">
 				<%=groupe.getNom()%></button></td>
 
 			<td><%=groupe.getEtudiants().size()%></td>

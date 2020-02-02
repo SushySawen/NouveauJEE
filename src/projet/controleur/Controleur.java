@@ -26,11 +26,7 @@ import java.util.*;
 @SuppressWarnings("serial")
 // on doit changer le contenu a l'interieur d'un template (garder seulement un
 // entete et un pieddepage)
-// dans init, mettre une fonction qui vérifie si la bdd est vide, et si c'est le
-// cas, la remplire avec des notes.
 // numéro : 54
-// variable de session pour le filtre de groupes ? Quand on clique sur un
-// groupe, cliquer ensuite sur consulter les notes etc, ne montre que ce groupe
 public class Controleur extends HttpServlet {
 
 	private String urlEtudiants;
@@ -121,22 +117,6 @@ public class Controleur extends HttpServlet {
 		return (int) (Math.random() * 8);
 	}
 
-	// Initialisation de la liste des notes si la BDD de notes est vide
-	/*
-	 * private static final HashMap<Integer, Integer>
-	 * intializelistEtudiantNotes() {
-	 * 
-	 * 
-	 * // Création du hasmap (association clé/valeur) // Association etudiant id
-	 * -> notes HashMap<Integer, Integer> listEtudiantNotesTemp = new
-	 * HashMap<>();
-	 * 
-	 * // Les notes sont générées aléatoirement Random rand = new Random(); for
-	 * (Etudiant etudiant : LISTE_ID_ETUDIANTS.values()) {
-	 * listEtudiantNotesTemp.put(etudiant.getId(), rand.nextInt(20)); }
-	 * 
-	 * //On retourne la liste d'étudiant return listEtudiantNotesTemp; }
-	 */
 
 	@Override
 	public void destroy() {
@@ -163,13 +143,8 @@ public class Controleur extends HttpServlet {
 		if (action == null) {
 			action = "/etudiants";
 		}
+		boutonFiltre(request);
 
-		//Gestion de la session
-		//reponse.sendRedirect -> pour clean l'url
-		String groupeId = request.getParameter("groupe");
-		if(groupeId != null){
-			request.getSession().setAttribute("groupe",Integer.valueOf(groupeId));
-		}
 		// Log action
 		System.out.println("PROJET JPA : action = " + action);
 
@@ -238,8 +213,9 @@ public class Controleur extends HttpServlet {
 		List<Module> modules;
 		List <Note> notes;//
 		List <Etudiant> etudiants;
-
+		//Récupération de la variable de session : un filtre sur les groupes d'étudiant.
 		Integer groupeID = (Integer) request.getSession().getAttribute("groupe");
+		//Si la variable de groupe est != null, on va récupérer les étudiants associés a ce groupe
 		if (groupeID != null) {
 			Groupe groupe = GroupeDAO.findGroupe(groupeID);
 			etudiants = groupe.getEtudiants();
@@ -250,11 +226,13 @@ public class Controleur extends HttpServlet {
 					notes.add(note);
 				}
 			}
+			//s'il n'y a pas de variable de session de groupe, on récupère tous les étudiants
 		} else {
 			modules = ModuleDAO.getAll();
 			etudiants = EtudiantDAO.getAll();
 			notes = NoteDAO.getAll();
 		}
+		//On récupère les notes d'un étudiant pour tous les modules auquel il participe
 		for (Note note : notes) {
 			Map<Integer, Note> noteEtu = notesParEtuModule.get(note.getEtudiant().getId());
 			if (noteEtu == null) {
@@ -279,7 +257,7 @@ public class Controleur extends HttpServlet {
 				.retrieveById(Integer.valueOf(request.getParameter("id")));
 		request.setAttribute("etudiant", etu);
 
-		// Chargement de la JSP de détail d'un étudient
+		// Chargement de la JSP de détail d'un étudiant
 		loadJSP(urlDetails, request, response);
 	}
 	// ///////////////////////
@@ -295,10 +273,11 @@ public class Controleur extends HttpServlet {
 	// va permettre de modifier les absences
 	private void doAbsences(HttpServletRequest request,
 							HttpServletResponse response) throws ServletException, IOException {
+		//On récupère les param de la jsp : les absences et l'id de l'étudiant
 		if (request.getParameter("etudiantAbsence")!=null && request.getParameter(("etuId"))!=null){
 			String ids[] = request.getParameterValues("etuId");
 			String valeurs[] = request.getParameterValues("etudiantAbsence");
-
+		//
 			int i = 0;
 			for (String id : ids){
 				Etudiant etudiant = EtudiantDAO.retrieveById(Integer.valueOf(id));
@@ -387,5 +366,18 @@ public class Controleur extends HttpServlet {
 		ServletContext sc = getServletContext();
 		RequestDispatcher rd = sc.getRequestDispatcher(url);
 		rd.forward(request, response);
+	}
+	//Renvoie un objet vide ou avec le filtre qui a été choisi a la jsp du filtre
+	public static void boutonFiltre(HttpServletRequest request){
+
+		//Gestion de la session
+		String ajouterFiltre = request.getParameter("ajouterFiltre");
+		String supprimerFiltre = request.getParameter("supprimerFiltre");
+		if(ajouterFiltre != null){
+			request.getSession().setAttribute("groupe",
+					Integer.valueOf(ajouterFiltre));
+		} else if (supprimerFiltre != null){
+			request.getSession().setAttribute("groupe",null);
+		}
 	}
 }
