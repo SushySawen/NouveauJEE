@@ -29,6 +29,7 @@ import java.util.*;
 // numéro : 54
 public class Controleur extends HttpServlet {
 
+	private String urlGestionTemplate;
 	private String urlEtudiants;
 	private String urlGroupes;
 	private String urlAccueil;
@@ -42,6 +43,7 @@ public class Controleur extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		// Récupération des URLs en paramètre du web.xml
+		urlGestionTemplate = getServletConfig().getInitParameter("urlGestionTemplate");
 		urlEtudiants = getServletConfig().getInitParameter("urlEtudiants");
 		urlGroupes = getServletConfig().getInitParameter("urlGroupes");
 		urlAccueil = getServletConfig().getInitParameter("urlAccueil");
@@ -117,7 +119,6 @@ public class Controleur extends HttpServlet {
 		return (int) (Math.random() * 8);
 	}
 
-
 	@Override
 	public void destroy() {
 		super.destroy();
@@ -129,9 +130,7 @@ public class Controleur extends HttpServlet {
 	// POST
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-
 			doGet(request, response);
-
 	}
 
 	// GET
@@ -143,6 +142,7 @@ public class Controleur extends HttpServlet {
 		if (action == null) {
 			action = "/etudiants";
 		}
+		//on lance le filtre sur les groupes
 		boutonFiltre(request);
 
 		// Log action
@@ -177,8 +177,13 @@ public class Controleur extends HttpServlet {
 		// Recupération des étudiants et des modules
 		initNotesParEtu(request, response);
 
-		// Chargement de la JSP consulter notes
-		loadJSP(urlConsulterNotes, request, response);
+
+		// Inclusion du content dans le template
+		request.setAttribute("content", urlConsulterNotes);
+		loadJSP(urlGestionTemplate, request, response);
+
+/*		// Chargement de la JSP consulter notes
+		loadJSP(urlConsulterNotes, request, response);*/
 	}
 	//Modifier les notes des etudiants
 	private void doNotes(HttpServletRequest request,
@@ -203,8 +208,13 @@ public class Controleur extends HttpServlet {
 
 		// Récupération des notes
 		initNotesParEtu(request, response);
-		// Chargement de la JSP de consultation des notes
-		loadJSP(urlNotes, request, response);
+
+		// Inclusion du content dans le template
+		request.setAttribute("content", urlNotes);
+		loadJSP(urlGestionTemplate, request, response);
+
+/*		// Chargement de la JSP de consultation des notes
+		loadJSP(urlNotes, request, response);*/
 	}
 	//Initialiser les notes des etudiants par modules
 	private void initNotesParEtu(HttpServletRequest request,
@@ -257,8 +267,12 @@ public class Controleur extends HttpServlet {
 				.retrieveById(Integer.valueOf(request.getParameter("id")));
 		request.setAttribute("etudiant", etu);
 
-		// Chargement de la JSP de détail d'un étudiant
-		loadJSP(urlDetails, request, response);
+		// Inclusion du content dans le template
+		request.setAttribute("content", urlDetails);
+		loadJSP(urlGestionTemplate, request, response);
+
+/*		// Chargement de la JSP de détail d'un étudiant
+		loadJSP(urlDetails, request, response);*/
 	}
 	// ///////////////////////
 	//
@@ -267,8 +281,11 @@ public class Controleur extends HttpServlet {
 
 		initAbsences(request);
 
-		//
-		loadJSP(urlConsulterAbsences, request, response);
+		// Inclusion du content dans le template
+		request.setAttribute("content", urlConsulterAbsences);
+		loadJSP(urlGestionTemplate, request, response);
+
+//		loadJSP(urlConsulterAbsences, request, response);
 	}
 	// va permettre de modifier les absences
 	private void doAbsences(HttpServletRequest request,
@@ -288,8 +305,12 @@ public class Controleur extends HttpServlet {
 		}
 		initAbsences(request);
 
-		// Chargement de la JSP de consultation des absences
-		loadJSP(urlAbsences, request, response);
+		// Inclusion du content dans le template
+		request.setAttribute("content", urlAbsences);
+		loadJSP(urlGestionTemplate, request, response);
+
+/*		// Chargement de la JSP de consultation des absences
+		loadJSP(urlAbsences, request, response);*/
 	}
 
 	private void initAbsences(HttpServletRequest request) {
@@ -309,8 +330,12 @@ public class Controleur extends HttpServlet {
 	private void doAccueil(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		// Chargement de la JSP d'acceuil
-		loadJSP(urlAccueil, request, response);
+		// Inclusion du content dans le template
+		request.setAttribute("content", urlAccueil);
+		loadJSP(urlGestionTemplate, request, response);
+
+/*		// Chargement de la JSP d'accueil
+		loadJSP(urlAccueil, request, response);*/
 	}
 	// ///////////////////////
 	//
@@ -323,8 +348,12 @@ public class Controleur extends HttpServlet {
 		// Ajouter les étudiants à la requête pour affichage
 		request.setAttribute("etudiants", etudiants);
 
-		// Chargement de la JSP consulter étudiants
-		loadJSP(urlEtudiants, request, response);
+		// Inclusion du content dans le template
+		request.setAttribute("content", urlEtudiants);
+		loadJSP(urlGestionTemplate, request, response);
+
+/*		// Chargement de la JSP consulter étudiants
+		loadJSP(urlEtudiants, request, response);*/
 	}
 	// ///////////////////////
 	//
@@ -337,8 +366,12 @@ public class Controleur extends HttpServlet {
 		// Ajouter les étudiants à la requête pour affichage
 		request.setAttribute("groupes", groupes);
 
-		// Chargement de la JSP de consultation des groupes
-		loadJSP(urlGroupes, request, response);
+		// Inclusion du content dans le template
+		request.setAttribute("content", urlGroupes);
+		loadJSP(urlGestionTemplate, request, response);
+
+/*		// Chargement de la JSP de consultation des groupes
+		loadJSP(urlGroupes, request, response);*/
 	}
 
 	/**

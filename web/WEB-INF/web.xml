@@ -33,6 +33,10 @@
         <servlet-name>controleur</servlet-name>
         <servlet-class>projet.controleur.Controleur</servlet-class>
         <init-param>
+            <param-name>urlGestionTemplate</param-name>
+            <param-value>/WEB-INF/JSP/gestionTemplate.jsp</param-value>
+        </init-param>
+        <init-param>
             <param-name>urlEtudiants</param-name>
             <param-value>/WEB-INF/JSP/etudiants.jsp</param-value>
         </init-param>
